@@ -49,7 +49,7 @@ logger = logging.getLogger(__name__)
 
 
 #Restringir o acesso a um manipulador (decorador)
-LISTA_DE_ADMINS = [673021454, 702068435]
+LISTA_DE_ADMINS = [IDSLIKENUMERHERE]
 
 def restricted(func):
     @wraps(func)
