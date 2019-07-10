@@ -49,7 +49,7 @@ logger = logging.getLogger(__name__)
 
 
 #Restringir o acesso a um manipulador (decorador)
-LISTA_DE_ADMINS = [IDSLIKENUMERHERE]
+LISTA_DE_ADMINS = [IDLIKENUMBERHERE]
 
 def restricted(func):
     @wraps(func)
@@ -76,7 +76,6 @@ def send_action(action):
         return command_func
     
     return decorator
-
 
 
 # Defina alguns manipuladores de comando. Estes geralmente levam os dois argumentos bot e
@@ -255,6 +254,7 @@ def check_feeds(update, context):
 #    if text == "enoque":
 #        context.bot.send_document(chat_id=-'1001192265900', document=open('books/O_Livro_de_Enoque_Apocrifo.pdf','rb'))
 #        update.message.reply_text('Documento: O Livro de Enoque Apócrifo | Enviado com Sucesso!') 
+
 
 
 #def add_group(update, context):
