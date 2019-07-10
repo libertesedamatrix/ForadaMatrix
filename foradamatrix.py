@@ -78,11 +78,6 @@ def send_action(action):
     return decorator
 
 
-def findat(msg):
-    # from a list of texts, it finds the one with the '@' sign
-    for i in msg:
-        if '&' in i:
-            return i
 
 # Defina alguns manipuladores de comando. Estes geralmente levam os dois argumentos bot e
 # atualização Os manipuladores de erro também recebem o objeto TelegramError levantado com erro.
