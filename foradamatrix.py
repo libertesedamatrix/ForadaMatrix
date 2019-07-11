@@ -56,7 +56,7 @@ def restricted(func):
         #username_id = update.effective_user #bot.get_chat
         if user_id not in LISTA_DE_ADMINS:
             #update.message.reply_text('Acesso não autorizado negado para {} ID: {}.'.format(username_id ,user_id))
-            update.message.reply_text('Acesso não autorizado negado para ID: {}.'.format(user_id))
+            #update.message.reply_text('Acesso não autorizado negado para ID: {}.'.format(user_id)) //desativado por enquando, por conta de flood dos membros.
             print("Acesso não autorizado negado para {}.".format(user_id))
             return
         return func(update, context, *args, **kwargs)
@@ -151,7 +151,7 @@ def check_feeds(bot, job):
             results = feed_to_md("set", name, feed_data)
             logger.debug(f"Rodando feed_to_md em {datetime.datetime.now()}")
             rss_msg = f"""[{results[0]["title"]}]({results[0]["url"]})"""
-            bot.send_message(chat_id="Insert User ID Here.", text=rss_msg, parse_mode="Markdown")
+            bot.send_message(chat_id="-1001192265900", text=rss_msg, parse_mode="Markdown")
     logger.debug("Dormindo por 30 mins...")
 
 
