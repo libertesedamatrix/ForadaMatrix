@@ -31,7 +31,7 @@ cd ForadaMatrix && sudo pip3 install -r requirements.txt
 ## Run tests
 
 ```sh
-not available yet
+python foradamatrix.py or python3 foradamatrix.py
 ```
 
 ## Author
