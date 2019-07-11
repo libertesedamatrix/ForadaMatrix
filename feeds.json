@@ -1,0 +1,34 @@
+{
+  "gatestoneinstitute": {
+    "url": "https://pt.gatestoneinstitute.org/articles/rss_pt.xml",
+    "date_title": ""
+  },
+  "anovaordemmundial": {
+    "url": "http://www.anovaordemmundial.com/",
+    "date_title": ""
+  },
+  "anovaordemmundial": {
+    "url": "http://feeds.feedburner.com/UmaNovaOrdemMundial",
+    "date_title": ""
+  },
+  "noticiasnaturais": {
+    "url": "http://www.noticiasnaturais.com/feed/",
+    "date_title": ""
+  },
+  "blogantinovaordemmundial": {
+    "url": "http://blog.antinovaordemmundial.com/feed/",
+    "date_title": ""
+  },
+  "bbcbrasil": {
+    "url": "https://www.bbc.com/portuguese",
+    "date_title": ""
+  },
+  "g1globo": {
+    "url": "https://g1.globo.com/rss/g1/brasil/",
+    "date_title": ""
+  },
+  "haveibeenpwned": {
+    "url": "http://www.previdencia.gov.br/feed",
+    "date_title": ""
+  }
+}

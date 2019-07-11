@@ -19,23 +19,21 @@ Pressione Ctrl-C na linha de comando ou envie um sinal para o processo para para
 robô.
 """
 try:
-    import feedparser, html2text, json, datetime
-    from loguru import logger
+    import logging
+    import os
+    import sys
+    from threading import Thread
+    #from telegram.ext import *
+    from telegram.ext import Updater, CommandHandler, MessageHandler, Filters
+    from functools import wraps #parte do send_action
+    import telegram.bot#parte onde precisa para o sistema de inundação(flood)
+    from telegram.ext import messagequeue as mq
+    from telegram import ParseMode #parte de textos padronizados, Negrito(bold * *), Itálico(Italic _ _), Mono(Mono ``)
+    from telegram.ext.dispatcher import run_async #Performance Optimizations
+    #from mwt import MWT
+    from emoji import emojize
 except ImportError as err:
-    print(f"Falhou ao importar módulos requeridos: {err}")
-
-import logging
-import os
-import sys
-from threading import Thread
-from telegram.ext import Updater, CommandHandler, MessageHandler, Filters
-from functools import wraps #parte do send_action
-import telegram.bot#parte onde precisa para o sistema de inundação(flood)
-from telegram.ext import messagequeue as mq
-from telegram import ParseMode #parte de textos padronizados, Negrito(bold * *), Itálico(Italic _ _), Mono(Mono ``)
-from telegram.ext.dispatcher import run_async #Performance Optimizations
-#from mwt import MWT
-from emoji import emojize
+    print(f"Falha ao importar os módulos necessários: {err}")
 
 # Habilitar logging
 logging.basicConfig(format='%(asctime)s - %(name)s - %(levelname)s - %(message)s',
@@ -49,7 +47,7 @@ logger = logging.getLogger(__name__)
 
 
 #Restringir o acesso a um manipulador (decorador)
-LISTA_DE_ADMINS = [IDLIKENUMBERHERE]
+LISTA_DE_ADMINS = [IDSLIKENUMBERHERE]
 
 def restricted(func):
     @wraps(func)
@@ -78,6 +76,86 @@ def send_action(action):
     return decorator
 
 
+def date_title(file_name, object_name, date_title):
+    """Set the date/title of latest post from a source.
+    file_name: File name to open.
+    Object_name: Name of the object: feed name or twitter screen name.
+    date_title: Date/title of the object being posted."""
+    try:
+        with open(file_name, "r+") as data_file:
+            # Load json structure into memory.
+            items = json.load(data_file)
+            for name, data in items.items():
+                if ((name) == (object_name)):
+                    # Replace value of date/title with date_title
+                    data["date_title"] = date_title
+                    # Go to the top of feeds.json file.
+                    data_file.seek(0)
+                    # Dump the new json structure to the file.
+                    json.dump(items, data_file, indent=2)
+                    data_file.truncate()
+            data_file.close()
+    except IOError:
+        logger.debug("date_title(): Falha ao abrir o arquivo solicitado.")
+
+def feed_to_md(state, name, feed_data):
+    """A Function for converting rss feeds into markdown text.
+    state: Either `set` or `None`: To execute date_title()
+    name: Name of RSS feed object: eg: hacker_news
+    feed_data: Data of the feed: URL and post_date from feeds.json"""
+    # Parse rss feed.
+    d = feedparser.parse(feed_data["url"])
+    # Target the first post.
+    first_post = d["entries"][0]
+    title = first_post["title"]
+    summary = first_post["summary"]
+    post_date = first_post["published"]
+    link = first_post["link"]
+    h = html2text.HTML2Text()
+    h.ignore_images = True
+    h.ignore_links = True
+    summary = h.handle(summary)
+    if ((state) == ("set")):
+        logger.debug(f"Rodando date_title para feeds.json em {datetime.datetime.now()}")
+        date_title("feeds.json", name, title)
+    results = []
+    result = {"title": title, "summary": summary,
+                "url": link, "post_date": post_date}
+    results.append(result)
+    # A list containing the dict object result.
+    return results
+
+def file_reader(path, mode):
+    """Loads json data from path specified.
+    path: Path to target_file.
+    mode: Mode for file to be opened in."""
+    try:
+        with open(path, mode) as target_file:
+            data = json.load(target_file)
+            target_file.close()
+            return data
+    except IOError:
+        logger.debug(f"Falhou ao abrir {path}")
+
+def check_feeds(bot, job):
+    """Checks the provided feeds from feeds.json for a new post."""
+    logger.debug("Cecando Feeds...")
+    feeds = file_reader("feeds.json", "r")
+    for name, feed_data in feeds.items():
+        results = feed_to_md(None, name, feed_data)
+        # Checking if title is the same as title in feeds.json file.
+        # If the same, pass; do nothing.
+        if ((feed_data["date_title"]) == (results[0]["title"])):
+            pass
+        elif ((feed_data["date_title"]) != (results[0]["title"])):
+            results = feed_to_md("set", name, feed_data)
+            logger.debug(f"Rodando feed_to_md em {datetime.datetime.now()}")
+            rss_msg = f"""[{results[0]["title"]}]({results[0]["url"]})"""
+            bot.send_message(chat_id="Insert User ID Here.", text=rss_msg, parse_mode="Markdown")
+    logger.debug("Dormindo por 30 mins...")
+
+
+
 # Defina alguns manipuladores de comando. Estes geralmente levam os dois argumentos bot e
 # atualização Os manipuladores de erro também recebem o objeto TelegramError levantado com erro.
 @restricted
@@ -85,7 +163,7 @@ def start(update, context):
     update.message.reply_text('Olá, Bot Iniciado no Grupo/Chat com sucesso.')
 
 def help(update, context):
-    update.message.reply_text('Help!')
+    update.message.reply_text('*Comandos*\n\n`/tempodivulgar`\n')
 
 #novos comandos
 
@@ -163,89 +241,6 @@ def regraslink(update, context):
 #    """Eco a mensagem do usuário."""
 #    update.message.reply_text(update.message.text)
 
-
-def date_title(file_name, object_name, date_title):
-    """Set the date/title of latest post from a source.
-    file_name: File name to open.
-    Object_name: Name of the object: feed name or twitter screen name.
-    date_title: Date/title of the object being posted."""
-    try:
-        with open(file_name, "r+") as data_file:
-            # Load json structure into memory.
-            items = json.load(data_file)
-            for name, data in items.items():
-                if ((name) == (object_name)):
-                    # Replace value of date/title with date_title
-                    data["date_title"] = date_title
-                    # Go to the top of subscription_manager.opml file.
-                    data_file.seek(0)
-                    # Dump the new json structure to the file.
-                    json.dump(items, data_file, indent=2)
-                    data_file.truncate()
-            data_file.close()
-    except IOError:
-        logger.debug("date_title(): Falhou ao abrir arquivos requeridos.")
-
-
-def feed_to_md(state, name, feed_data):
-    """A Function for converting rss feeds into markdown text.
-    state: Either `set` or `None`: To execute date_title()
-    name: Name of RSS feed object: eg: hacker_news
-    feed_data: Data of the feed: URL and post_date from subscription_manager.opml"""
-    # Parse rss feed.
-    d = feedparser.parse(feed_data["url"])
-    # Target the first post.
-    first_post = d["entries"][0]
-    title = first_post["title"]
-    summary = first_post["summary"]
-    post_date = first_post["published"]
-    link = first_post["link"]
-    h = html2text.HTML2Text()
-    h.ignore_images = True
-    h.ignore_links = True
-    summary = h.handle(summary)
-    if ((state) == ("set")):
-        logger.debug(f"Rodando date_title para subscription_manager.opml em {datetime.datetime.now()}")
-        date_title("subscription_manager.opml", name, title)
-    results = []
-    result = {"title": title, "summary": summary,
-                "url": link, "post_date": post_date}
-    results.append(result)
-    # A list containing the dict object result.
-    return results
-
-
-def file_reader(path, mode):
-    """Loads json data from path specified.
-    path: Path to target_file.
-    mode: Mode for file to be opened in."""
-    try:
-        with open(path, mode) as target_file:
-            data = json.load(target_file)
-            target_file.close()
-            return data
-    except IOError:
-        logger.debug(f"Falhou ao abrir {path}")
-
-
-def check_feeds(update, context):
-    """Checks the provided feeds from subscription_manager.opml for a new post."""
-    chat_id = update.message.chat_id
-    job = context.job
-    logger.debug("Checando Feeds...")
-    feeds = file_reader("subscription_manager.opml.opml", "r")
-    for name, feed_data in feeds.items():
-        results = feed_to_md(None, name, feed_data)
-        # Checking if title is the same as title in subscription_manager.opml file.
-        # If the same, pass; do nothing.
-        if ((feed_data["date_title"]) == (results[0]["title"])):
-            pass
-        elif ((feed_data["date_title"]) != (results[0]["title"])):
-            results = feed_to_md("set", name, feed_data)
-            logger.debug(f"Rodando feed_to_md at {datetime.datetime.now()}")
-            rss_msg = f"""[{results[0]["title"]}]({results[0]["url"]})"""
-            context.bot.send_message(chat_id="update.message.chat_id", text=rss_msg, parse_mode="Markdown")
-    logger.debug("Dormindo por 30 mins...")
 
 
 #def callback_enochbook(update, context):
@@ -331,6 +326,7 @@ def main():
     saiu_grupo_handle = MessageHandler(Filters.status_update.left_chat_member, saiugrupo)
     dp.add_handler(saiu_grupo_handle)
     dp.add_handler(CommandHandler('reiniciar', restart, filters=Filters.user(username='@AASaints')))
+    j.run_repeating(check_feeds, interval=300, first=0)
 
     
     #dp.add_handler(CommandHandler("tempodivulgar", set_timer,
