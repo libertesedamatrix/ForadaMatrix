@@ -25,7 +25,7 @@ sudo apt install python3
 ## Usage
 
 ```sh
-python3 foradamatrix.py
+cd ForadaMatrix && sudo pip3 install -r requirements.txt
 ```
 
 ## Run tests
