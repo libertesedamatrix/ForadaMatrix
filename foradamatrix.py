@@ -23,21 +23,16 @@ try:
     import os
     import sys
     from threading import Thread
-    #from telegram.ext import *
     from telegram.ext import Updater, CommandHandler, MessageHandler, Filters
     from functools import wraps #parte do send_action
-    import telegram.bot#parte onde precisa para o sistema de inundação(flood)
     from telegram.ext import messagequeue as mq
     from telegram import ParseMode #parte de textos padronizados, Negrito(bold * *), Itálico(Italic _ _), Mono(Mono ``)
     from telegram.ext.dispatcher import run_async #Performance Optimizations
-    #from mwt import MWT
     from emoji import emojize
     import feedparser, html2text, json, datetime
     from loguru import logger
 except ImportError as err:
     print(f"Falha ao importar os módulos necessários: {err}")
-
-
 
 # Habilitar logging
 logging.basicConfig(format='%(asctime)s - %(name)s - %(levelname)s - %(message)s',
@@ -51,7 +46,7 @@ logger = logging.getLogger(__name__)
 
 
 #Restringir o acesso a um manipulador (decorador)
-LISTA_DE_ADMINS = [IDSLIKENUMBERHERE]
+LISTA_DE_ADMINS = [USERIDAQUI]
 
 def restricted(func):
     @wraps(func)
@@ -155,7 +150,7 @@ def check_feeds(bot, job):
             results = feed_to_md("set", name, feed_data)
             logger.debug(f"Rodando feed_to_md em {datetime.datetime.now()}")
             rss_msg = f"""[{results[0]["title"]}]({results[0]["url"]})"""
-            bot.send_message(chat_id="-1001192265900", text=rss_msg, parse_mode="Markdown")
+            bot.send_message(chat_id="Insert User ID Here.", text=rss_msg, parse_mode="Markdown")
     logger.debug("Dormindo por 30 mins...")
 
 
@@ -293,7 +288,6 @@ def restart(update, context):
 def error(update, context):
     logger.debug(error)
     logger.warning('Update "%s" caused error "%s"', update, context.error)
-
 
 
 
