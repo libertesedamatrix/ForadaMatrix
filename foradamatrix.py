@@ -152,21 +152,17 @@ def error(update, context):
 def main():
     u = Updater("SeuTokenAqui", use_context=True)
     j = u.job_queue
-
     # Obtem o despachante para registrar manipuladores
     dp = u.dispatcher
 
     # em comandos diferentes - responde no Telegram
     dp.add_handler(CommandHandler("start", start))
     dp.add_handler(CommandHandler("help", help))
-    dp.add_handler(CommandHandler("bibliotecas", callback_bibliotecas))
-    dp.add_handler(CommandHandler("regras", regraslink))
     entrou_grupo_handle = MessageHandler(Filters.status_update.new_chat_members, entrougrupo)
     dp.add_handler(entrou_grupo_handle)
     saiu_grupo_handle = MessageHandler(Filters.status_update.left_chat_member, saiugrupo)
     dp.add_handler(saiu_grupo_handle)
     j.run_repeating(check_feeds, interval=300, first=0)
-
 
     # registra todos os erros
     dp.add_error_handler(error)
