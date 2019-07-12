@@ -1,6 +1,7 @@
 <h1 align="center">Welcome to Source ForadaMatrixBOT 👋</h1>
 <p>
   <img src="https://img.shields.io/badge/version-0.0.1-blue.svg?cacheSeconds=2592000" />
+  <<img src="https://img.shields.io/badge/in-development-brightgreen.svg" />
   <a href="https://github.com/foradamatrix/ForadaMatrix#readme">
     <img alt="Documentation" src="https://img.shields.io/badge/documentation-yes-brightgreen.svg" target="_blank" />
   </a>
