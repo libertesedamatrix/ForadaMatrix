@@ -4,4 +4,4 @@ feedparser
 html2text 
 datetime
 loguru 
-
+emoji
