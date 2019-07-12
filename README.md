@@ -37,7 +37,11 @@ python foradamatrix.py or python3 foradamatrix.py
 ```
 ## use este arquivo como ferramenta para testadores do código:
 
-dentro da pasta, remova o arquivo "a.sh", e execute ele com:
+dentro da pasta, remova o arquivo "a.sh", e digite:
+```sh
+chmod 755 a.sh
+```
+e execute ele com:
 ```sh
 ./a.sh
 ```
