@@ -1,23 +1,6 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
-# Este programa é dedicado ao domínio público sob a licença CC0.
-#
-# ESTE EXEMPLO FOI ATUALIZADO PARA TRABALHAR COM A VERSÃO BETA 12 DO PYTHON-TELEGRAM-BOT.
-# Se você ainda estiver usando a versão 11.1.0, por favor, veja os exemplos em
-# https://github.com/python-telegram-bot/python-telegram-bot/tree/v11.1.0/examples
 
-"""
-Bot simples para responder mensagens do telegram.
-
-Primeiro, algumas funções do manipulador são definidas. Então, essas funções são passadas para
-Despachante e registrados em seus respectivos lugares.
-Então, o bot é iniciado e é executado até pressionar Ctrl-C na linha de comando.
-
-Uso:
-Exemplo básico de Echobot, repete mensagens.
-Pressione Ctrl-C na linha de comando ou envie um sinal para o processo para parar o
-robô.
-"""
 try:
     import logging
     import os
@@ -145,24 +128,14 @@ def start(update, context):
     update.message.reply_text('Olá, Bot Iniciado no Grupo/Chat com sucesso.')
 
 def help(update, context):
-    update.message.reply_text('*Comandos*\n\n`/tempodivulgar`\n')
-
-
-def callback_bibliotecas(update, context):
-    pass
-    update.message.reply_text('#Bibliotecas\n_BIBLIOTECAS_\n_Clique nos nomes para ser Redirecionado_\n \n[Biblioteca em Nuvem](t.me/bibliotecajpl)\n`quase 3000 livros em PDFs disponibilizados`\n \n[Biblioteca - Humberto Volts](t.me/bibliotecahumbertovolts)\n`Bibliotecas de audios sobre informações e conhecimentos do Humberto Volts/Grupo(s)/Membros`\n \n [EMPREENDIMENTOS COLETIVOS - A CURA É A UNIÃO!](https://t.me/joinchat/MEGw_Uk8WqekcCZBfsGlFQ)\n`GRUPO DE CURA ESPIRITUAL ATRAVÉS DA ENERGIA MACRO DO UNIVERSO - ESSA ENERGIA ESTÁ PRESENTE EM TODOS NÓS E É O PONTO DE CONEXÃO COM O CRIADOR` ', parse_mode=ParseMode.MARKDOWN)
-
-
-def regraslink(update, context):
-    pass
-    update.message.reply_text("👉 https://t.me/grupohumbertovolts/126998 👈🏿\n     ☝🏿                                                                           👆", use_aliases=True)
+    update.message.reply_text('Ainda não disponível')
 
 
 #def add_group(update, context):
 def entrougrupo(update, context):
     for member in update.message.new_chat_members:
         #update.message.reply_text("\nShalom {firstname} {lastname} ({username}).  *BOT?: *`{isonobot}`\nSeja muito bem vindo(a) ao canal @grupohumbertovolts.\nQue a Tranquilidade do Criador esteja com você!.\n *Entrou por link do convite?: *`[em breve]`".format(firstname=member.first_name, lastname=member.last_name, username=member.username, isonobot=member.is_bot), parse_mode=ParseMode.MARKDOWN)
-        update.message.reply_text("\nShalom {fullname} ({username}).\nSeja muito bem vindo(a) ao canal/grupo @grupohumbertovolts.\nQue a Tranquilidade do Criador esteja com você!.\n*Entrou por link do convite?:*`[em breve]` | *BOT?:* `{isonobot}`".format(fullname=member.full_name, username=member.username, isonobot=member.is_bot), parse_mode=ParseMode.MARKDOWN, use_aliases=True, disable_web_page_preview=True)
+        update.message.reply_text("\nShalom {fullname} ({username}).\nSeja muito bem vindo(a) ao canal/grupo 00{group_name}.\nQue a Tranquilidade do Criador esteja com você!.\n*Entrou por link do convite?:*`[em breve]` | *BOT?:* `{isonobot}`".format(fullname=member.full_name, username=member.username, group_name=update.message.chat.title, isonobot=member.is_bot), parse_mode=ParseMode.MARKDOWN, use_aliases=True, disable_web_page_preview=True)
 
 def saiugrupo(update, context):
     for member in update.message.left_chat_member:
