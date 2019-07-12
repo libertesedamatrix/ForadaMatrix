@@ -12,48 +12,54 @@
   </a>
 </p>
 
-> A random and useful TelegramBOT made by A.A.
+> Um aleatório e útil TelegramBOT feito por A.A and fabriciocaetano.
 
-### 🏠 [Homepage](https://github.com/foradamatrix/ForadaMatrix#readme)
+### 🏠 [Página Inicial](https://github.com/foradamatrix/ForadaMatrix#readme)
 
-## Install
+## Instalação
 
 ```sh
 sudo apt install python3
 cd ForadaMatrix && sudo pip3 install -r requirements.txt
 ```
 
-## Usage
+## Uso
 
 ```sh
 python3 foradamatrix.py 
 ```
 
-## Run tests
+## Executar testes
 
 ```sh
 python foradamatrix.py or python3 foradamatrix.py
 ```
 
-## Author
+## Autor(es)
 
 👤 **A.A**
-
 * Twitter: [@foradamatrix_](https://twitter.com/foradamatrix_)
 * Github: [@foradamatrix](https://github.com/foradamatrix)
 
-## 🤝 Contributing
+## Co-Autor(es)
+**fabriciocaetano**
+* Twitter: 
+* Github: [@fabriciocaetano](https://github.com/fabriciocaetano)
 
-Contributions, issues and feature requests are welcome!<br />Feel free to check [issues page](https://github.com/foradamatrix/ForadaMatrix/issues).
 
-## Show your support
+## 🤝 Contribuindo
 
-Give a ⭐️ if this project helped you!
+Contribuições, problemas e solicitações de recursos são bem-vindas!<br />Sinta-se à vontade para verificar [issues page](https://github.com/foradamatrix/ForadaMatrix/issues).
+@all-contributors
+
+## Mostre seu apoio
+
+Dê uma ⭐️ se este projeto te ajudou!
 
 ## 📝 License
 
 Copyright © 2019 [A.A](https://github.com/foradamatrix).<br />
-This project is [MIT](https://github.com/foradamatrix/ForadaMatrix/blob/master/LICENSE) licensed.
+Este projeto é protegido por [MIT](https://github.com/foradamatrix/ForadaMatrix/blob/master/LICENSE) licensed.
 
 ***
-_This README was generated with ❤️ by [readme-md-generator](https://github.com/kefranabg/readme-md-generator)_
+_Este README foi gerado com ❤️ por [readme-md-generator](https://github.com/kefranabg/readme-md-generator)_
