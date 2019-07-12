@@ -35,7 +35,12 @@ python3 foradamatrix.py
 ```sh
 python foradamatrix.py or python3 foradamatrix.py
 ```
+## use este arquivo como ferramenta para testadores do código:
 
+*dentro da pasta, remova o arquivo "a.sh", e execute:
+```sh
+./a.sh
+```
 ## Autor(es)
 
 👤 **A.A**
