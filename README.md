@@ -42,7 +42,6 @@ python foradamatrix.py or python3 foradamatrix.py
 * Twitter: [@foradamatrix_](https://twitter.com/foradamatrix_)
 * Github: [@foradamatrix](https://github.com/foradamatrix)
 
-## Co-Autor(es)
 👥 **fabriciocaetano**
 * Twitter: 
 * Github: [@fabriciocaetano](https://github.com/fabriciocaetano)
