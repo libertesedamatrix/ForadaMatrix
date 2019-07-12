@@ -20,12 +20,13 @@
 
 ```sh
 sudo apt install python3
+cd ForadaMatrix && sudo pip3 install -r requirements.txt
 ```
 
 ## Usage
 
 ```sh
-cd ForadaMatrix && sudo pip3 install -r requirements.txt
+python3 foradamatrix.py 
 ```
 
 ## Run tests
