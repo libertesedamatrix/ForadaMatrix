@@ -131,7 +131,6 @@ def start(update, context):
 def help(update, context):
     update.message.reply_text('Ainda não disponível')
 
-
 #def add_group(update, context):
 def entrougrupo(update, context):
     for member in update.message.new_chat_members:
@@ -141,6 +140,11 @@ def entrougrupo(update, context):
 def saiugrupo(update, context):
     for member in update.message.left_chat_member:
         update.message.reply_text("{fullname} ({username}) saiu do grupo.".format(fullname=member.full_name, username=member.username))
+
+
+def callback_checkbotison(update, context):
+    pass
+    update.message.reply_text('`Estou online.`', use_aliases=True, parse_mode=ParseMode.MARKDOWN)
 
 
 def error(update, context):
@@ -159,6 +163,7 @@ def main():
     # em comandos diferentes - responde no Telegram
     dp.add_handler(CommandHandler("start", start))
     dp.add_handler(CommandHandler("help", help))
+    dp.add_handler(CommandHandler("checar", callback_checkbotison))
     entrou_grupo_handle = MessageHandler(Filters.status_update.new_chat_members, entrougrupo)
     dp.add_handler(entrou_grupo_handle)
     saiu_grupo_handle = MessageHandler(Filters.status_update.left_chat_member, saiugrupo)
