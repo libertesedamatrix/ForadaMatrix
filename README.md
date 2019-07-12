@@ -50,7 +50,6 @@ python foradamatrix.py or python3 foradamatrix.py
 ## 🤝 Contribuindo
 
 Contribuições, problemas e solicitações de recursos são bem-vindas!<br />Sinta-se à vontade para verificar [issues page](https://github.com/foradamatrix/ForadaMatrix/issues).
-@all-contributors
 
 ## Mostre seu apoio
 

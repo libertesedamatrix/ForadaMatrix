@@ -25,7 +25,7 @@ logger = logging.getLogger(__name__)
 
 
 #Restringir o acesso a um manipulador (decorador)
-LISTA_DE_ADMINS = [USERIDAQUI]
+LISTA_DE_ADMINS = ['SeuIdDoTelegram']
 
 def restricted(func):
     @wraps(func)
@@ -159,7 +159,6 @@ def main():
     # em comandos diferentes - responde no Telegram
     dp.add_handler(CommandHandler("start", start))
     dp.add_handler(CommandHandler("help", help))
-    dp.add_handler(CommandHandler("checar", callback_checkbotison))
     dp.add_handler(CommandHandler("bibliotecas", callback_bibliotecas))
     dp.add_handler(CommandHandler("regras", regraslink))
     entrou_grupo_handle = MessageHandler(Filters.status_update.new_chat_members, entrougrupo)
