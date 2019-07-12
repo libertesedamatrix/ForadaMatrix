@@ -103,7 +103,8 @@ def file_reader(path, mode):
     except IOError:
         logger.debug(f"Falhou ao abrir {path}")
 
-def check_feeds(bot, job):
+def check_feeds(context):
+    job = context.job
     """Checks the provided feeds from feeds.json for a new post."""
     logger.debug("Cecando Feeds...")
     feeds = file_reader("feeds.json", "r")
@@ -117,7 +118,7 @@ def check_feeds(bot, job):
             results = feed_to_md("set", name, feed_data)
             logger.debug(f"Rodando feed_to_md em {datetime.datetime.now()}")
             rss_msg = f"""[{results[0]["title"]}]({results[0]["url"]})"""
-            bot.send_message(chat_id="Insert User ID Here.", text=rss_msg, parse_mode="Markdown")
+            context.bot.send_message(chat_id="Insert User ID Here.", text=rss_msg, parse_mode="Markdown")
     logger.debug("Dormindo por 30 mins...")
 
 
