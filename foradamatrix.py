@@ -23,6 +23,7 @@ logging.basicConfig(format='%(asctime)s - %(name)s - %(levelname)s - %(message)s
 
 logger = logging.getLogger(__name__)
 
+#chat_id= update.message.chat_id
 
 #Restringir o acesso a um manipulador (decorador)
 LISTA_DE_ADMINS = ['SeuIdDoTelegram']
@@ -137,9 +138,13 @@ def entrougrupo(update, context):
         #update.message.reply_text("\nShalom {firstname} {lastname} ({username}).  *BOT?: *`{isonobot}`\nSeja muito bem vindo(a) ao canal @grupohumbertovolts.\nQue a Tranquilidade do Criador esteja com você!.\n *Entrou por link do convite?: *`[em breve]`".format(firstname=member.first_name, lastname=member.last_name, username=member.username, isonobot=member.is_bot), parse_mode=ParseMode.MARKDOWN)
         update.message.reply_text("\nShalom {fullname} ({username}).\nSeja muito bem vindo(a) ao canal/grupo {group_name}.\nQue a Tranquilidade do Criador esteja com você!.\n*Entrou por link do convite?:*`[em breve]` | *BOT?:* `{isonobot}`".format(fullname=member.full_name, username=member.username, group_name=update.message.chat.title, isonobot=member.is_bot), parse_mode=ParseMode.MARKDOWN, use_aliases=True, disable_web_page_preview=True)
 
+if member.get_profile_photos == True:
+    update.message.reply_text("Recomendável tirar a foto do perfil")
+
 def saiugrupo(update, context):
     for member in update.message.left_chat_member:
         update.message.reply_text("{fullname} ({username}) saiu do grupo.".format(fullname=member.full_name, username=member.username))
+    
 
 
 def callback_checkbotison(update, context):
