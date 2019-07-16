@@ -42,7 +42,6 @@ def restricted(func):
     return wrapped
 
 
-
 def date_title(file_name, object_name, date_title):
     """Set the date/title of latest post from a source.
     file_name: File name to open.
