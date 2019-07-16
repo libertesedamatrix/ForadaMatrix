@@ -120,8 +120,8 @@ def check_feeds(context):
             rss_msg = f"""[{results[0]["title"]}]({results[0]["url"]})"""
             context.bot.send_message(chat_id="Insert User ID Here.", text=rss_msg, parse_mode="Markdown")
     logger.debug("Dormindo por 30 mins...")
-
-
+    
+    
 # Defina alguns manipuladores de comando. Estes geralmente levam os dois argumentos bot e
 # atualização Os manipuladores de erro também recebem o objeto TelegramError levantado com erro.
 @restricted
@@ -144,7 +144,6 @@ def saiugrupo(update, context):
         update.message.reply_text("{fullname} ({username}) saiu do grupo.".format(fullname=member.full_name, username=member.username))
     
 
-
 def callback_checkbotison(update, context):
     pass
     update.message.reply_text('`Estou online.`', use_aliases=True, parse_mode=ParseMode.MARKDOWN)
@@ -153,8 +152,6 @@ def callback_checkbotison(update, context):
 def error(update, context):
     logger.debug(error)
     logger.warning('Update "%s" caused error "%s"', update, context.error)
-
-
 
 
 def main():
@@ -178,7 +175,6 @@ def main():
     # Inicia o Bot
     u.start_polling()
     u.idle()
-
 
 if __name__ == '__main__':
     main()
