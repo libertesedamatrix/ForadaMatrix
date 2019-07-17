@@ -42,6 +42,20 @@ def restricted(func):
     return wrapped
 
 
+
+# Defina alguns manipuladores de comando. Estes geralmente levam os dois argumentos bot e
+# atualização Os manipuladores de erro também recebem o objeto TelegramError levantado com erro.
+@restricted
+def start(update, context):
+    update.message.reply_text('Olá, Bot Iniciado no Grupo/Chat com sucesso.')
+
+def help(update, context):
+    update.message.reply_text('Ainda não disponível')
+
+#novas callbacks
+
+#
+
 def date_title(file_name, object_name, date_title):
     """Set the date/title of latest post from a source.
     file_name: File name to open.
@@ -104,9 +118,9 @@ def file_reader(path, mode):
         logger.debug(f"Falhou ao abrir {path}")
 
 def check_feeds(context):
-    job = context.job
+    #job = context.job
     """Checks the provided feeds from feeds.json for a new post."""
-    logger.debug("Cecando Feeds...")
+    logger.debug("Checando Feeds...")
     feeds = file_reader("feeds.json", "r")
     for name, feed_data in feeds.items():
         results = feed_to_md(None, name, feed_data)
@@ -118,18 +132,8 @@ def check_feeds(context):
             results = feed_to_md("set", name, feed_data)
             logger.debug(f"Rodando feed_to_md em {datetime.datetime.now()}")
             rss_msg = f"""[{results[0]["title"]}]({results[0]["url"]})"""
-            context.bot.send_message(chat_id="Insert User ID Here.", text=rss_msg, parse_mode="Markdown")
+            context.bot.send_message(chat_id = update.message.chat_id, text=rss_msg, parse_mode="Markdown")
     logger.debug("Dormindo por 30 mins...")
-
-
-# Defina alguns manipuladores de comando. Estes geralmente levam os dois argumentos bot e
-# atualização Os manipuladores de erro também recebem o objeto TelegramError levantado com erro.
-@restricted
-def start(update, context):
-    update.message.reply_text('Olá, Bot Iniciado no Grupo/Chat com sucesso.')
-
-def help(update, context):
-    update.message.reply_text('Ainda não disponível')
 
 #def add_group(update, context):
 def entrougrupo(update, context):
