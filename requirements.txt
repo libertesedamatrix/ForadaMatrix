@@ -6,7 +6,5 @@ datetime
 loguru 
 emoji
 feedparser
-json
 functools
-threading
 loguru
