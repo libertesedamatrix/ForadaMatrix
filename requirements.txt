@@ -7,4 +7,5 @@ loguru
 emoji
 feedparser
 functools
+threading
 loguru
