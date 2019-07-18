@@ -134,8 +134,6 @@ def check_feeds(context):
             rss_msg = f"""[{results[0]["title"]}]({results[0]["url"]})"""
             context.bot.send_message(chat_id = update.message.chat_id, text=rss_msg, parse_mode="Markdown")
     logger.debug("Dormindo por 30 mins...")
-<<<<<<< HEAD
-=======
     
     
 # Defina alguns manipuladores de comando. Estes geralmente levam os dois argumentos bot e
@@ -146,7 +144,6 @@ def start(update, context):
 
 def help(update, context):
     update.message.reply_text('Ainda não disponível')
->>>>>>> cda28ab49edf08968eb778da80593796de74439b
 
 #def add_group(update, context):
 def entrougrupo(update, context):
