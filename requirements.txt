@@ -7,4 +7,3 @@ loguru
 emoji
 feedparser
 functools
-loguru
