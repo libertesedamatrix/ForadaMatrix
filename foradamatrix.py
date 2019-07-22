@@ -12,8 +12,6 @@ try:
     from telegram import ParseMode #parte de textos padronizados, Negrito(bold * *), Itálico(Italic _ _), Mono(Mono ``)
     from telegram.ext.dispatcher import run_async #Performance Optimizations
     from emoji import emojize
-    import feedparser, html2text, json, datetime
-    from loguru import logger
 except ImportError as err:
     print(f"Falha ao importar os módulos necessários: {err}")
 
@@ -54,87 +52,7 @@ def help(update, context):
 
 #novas callbacks
 
-#
-
-def date_title(file_name, object_name, date_title):
-    """Set the date/title of latest post from a source.
-    file_name: File name to open.
-    Object_name: Name of the object: feed name or twitter screen name.
-    date_title: Date/title of the object being posted."""
-    try:
-        with open(file_name, "r+") as data_file:
-            # Load json structure into memory.
-            items = json.load(data_file)
-            for name, data in items.items():
-                if ((name) == (object_name)):
-                    # Replace value of date/title with date_title
-                    data["date_title"] = date_title
-                    # Go to the top of feeds.json file.
-                    data_file.seek(0)
-                    # Dump the new json structure to the file.
-                    json.dump(items, data_file, indent=2)
-                    data_file.truncate()
-            data_file.close()
-    except IOError:
-        logger.debug("date_title(): Falha ao abrir o arquivo solicitado.")
-
-def feed_to_md(state, name, feed_data):
-    """A Function for converting rss feeds into markdown text.
-    state: Either `set` or `None`: To execute date_title()
-    name: Name of RSS feed object: eg: hacker_news
-    feed_data: Data of the feed: URL and post_date from feeds.json"""
-    # Parse rss feed.
-    d = feedparser.parse(feed_data["url"])
-    # Target the first post.
-    first_post = d["entries"][0]
-    title = first_post["title"]
-    summary = first_post["summary"]
-    post_date = first_post["published"]
-    link = first_post["link"]
-    h = html2text.HTML2Text()
-    h.ignore_images = True
-    h.ignore_links = True
-    summary = h.handle(summary)
-    if ((state) == ("set")):
-        logger.debug(f"Rodando date_title para feeds.json em {datetime.datetime.now()}")
-        date_title("feeds.json", name, title)
-    results = []
-    result = {"title": title, "summary": summary,
-                "url": link, "post_date": post_date}
-    results.append(result)
-    # A list containing the dict object result.
-    return results
-
-def file_reader(path, mode):
-    """Loads json data from path specified.
-    path: Path to target_file.
-    mode: Mode for file to be opened in."""
-    try:
-        with open(path, mode) as target_file:
-            data = json.load(target_file)
-            target_file.close()
-            return data
-    except IOError:
-        logger.debug(f"Falhou ao abrir {path}")
-
-def check_feeds(context):
-    #job = context.job
-    """Checks the provided feeds from feeds.json for a new post."""
-    logger.debug("Checando Feeds...")
-    feeds = file_reader("feeds.json", "r")
-    for name, feed_data in feeds.items():
-        results = feed_to_md(None, name, feed_data)
-        # Checking if title is the same as title in feeds.json file.
-        # If the same, pass; do nothing.
-        if ((feed_data["date_title"]) == (results[0]["title"])):
-            pass
-        elif ((feed_data["date_title"]) != (results[0]["title"])):
-            results = feed_to_md("set", name, feed_data)
-            logger.debug(f"Rodando feed_to_md em {datetime.datetime.now()}")
-            rss_msg = f"""[{results[0]["title"]}]({results[0]["url"]})"""
-            context.bot.send_message(chat_id = update.message.chat_id, text=rss_msg, parse_mode="Markdown")
-    logger.debug("Dormindo por 30 mins...")
-    
+# 
     
 # Defina alguns manipuladores de comando. Estes geralmente levam os dois argumentos bot e
 # atualização Os manipuladores de erro também recebem o objeto TelegramError levantado com erro.
@@ -149,7 +67,7 @@ def help(update, context):
 def entrougrupo(update, context):
     for member in update.message.new_chat_members:
         #update.message.reply_text("\nShalom {firstname} {lastname} ({username}).  *BOT?: *`{isonobot}`\nSeja muito bem vindo(a) ao canal @grupohumbertovolts.\nQue a Tranquilidade do Criador esteja com você!.\n *Entrou por link do convite?: *`[em breve]`".format(firstname=member.first_name, lastname=member.last_name, username=member.username, isonobot=member.is_bot), parse_mode=ParseMode.MARKDOWN)
-        update.message.reply_text("\nShalom {fullname} ({username}).\nSeja muito bem vindo(a) ao canal/grupo {group_name}.\nQue a Tranquilidade do Criador esteja com você!.\n*Entrou por link do convite?:*`[em breve]` | *BOT?:* `{isonobot}`".format(fullname=member.full_name, username=member.username, group_name=update.message.chat.title, isonobot=member.is_bot), parse_mode=ParseMode.MARKDOWN, use_aliases=True, disable_web_page_preview=True)
+        update.message.reply_text("\nShalom {fullname} ({username}).\nSeja muito bem vindo(a) ao canal/grupo [-| {group_name} |-].\nQue a Tranquilidade do Criador esteja com você!.\n*Entrou por link do convite?:*`[em breve]` | *BOT?:* `{isonobot}`".format(fullname=member.full_name, username=member.username, group_name=update.message.chat.title, isonobot=member.is_bot), parse_mode=ParseMode.MARKDOWN, use_aliases=True, disable_web_page_preview=True)
         if member.get_profile_photos == True:
             update.message.reply_text("Recomendável tirar a foto do perfil")
 
@@ -182,7 +100,6 @@ def main():
     dp.add_handler(entrou_grupo_handle)
     saiu_grupo_handle = MessageHandler(Filters.status_update.left_chat_member, saiugrupo)
     dp.add_handler(saiu_grupo_handle)
-    j.run_repeating(check_feeds, interval=300, first=0)
 
     # registra todos os erros
     dp.add_error_handler(error)
