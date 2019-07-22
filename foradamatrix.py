@@ -21,6 +21,7 @@ logging.basicConfig(format='%(asctime)s - %(name)s - %(levelname)s - %(message)s
 
 logger = logging.getLogger(__name__)
 
+#use isso em cada callback que for usar chat_id para não precisar colocar o id do chat
 #chat_id= update.message.chat_id
 
 #Restringir o acesso a um manipulador (decorador)
@@ -39,10 +40,6 @@ def restricted(func):
         return func(update, context, *args, **kwargs)
     return wrapped
 
-
-
-# Defina alguns manipuladores de comando. Estes geralmente levam os dois argumentos bot e
-# atualização Os manipuladores de erro também recebem o objeto TelegramError levantado com erro.
 @restricted
 def start(update, context):
     update.message.reply_text('Olá, Bot Iniciado no Grupo/Chat com sucesso.')
@@ -53,15 +50,6 @@ def help(update, context):
 #novas callbacks
 
 # 
-    
-# Defina alguns manipuladores de comando. Estes geralmente levam os dois argumentos bot e
-# atualização Os manipuladores de erro também recebem o objeto TelegramError levantado com erro.
-@restricted
-def start(update, context):
-    update.message.reply_text('Olá, Bot Iniciado no Grupo/Chat com sucesso.')
-
-def help(update, context):
-    update.message.reply_text('Ainda não disponível')
 
 #def add_group(update, context):
 def entrougrupo(update, context):
@@ -73,18 +61,15 @@ def entrougrupo(update, context):
 
 def saiugrupo(update, context):
     for member in update.message.left_chat_member:
-        update.message.reply_text("{fullname} ({username}) saiu do grupo.".format(fullname=member.full_name, username=member.username))
-    
+        update.message.reply_text("{fullname} ({username}) saiu do grupo.".format(fullname=member.full_name, username=member.username))   
 
 def callback_checkbotison(update, context):
     pass
     update.message.reply_text('`Estou online.`', use_aliases=True, parse_mode=ParseMode.MARKDOWN)
 
-
 def error(update, context):
     logger.debug(error)
     logger.warning('Update "%s" caused error "%s"', update, context.error)
-
 
 def main():
     u = Updater("SeuTokenAqui", use_context=True)
