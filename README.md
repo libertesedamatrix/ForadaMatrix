@@ -1,4 +1,4 @@
-<h1 align="center">Welcome to Source ForadaMatrixBOT 👋</h1>
+<h1 align="center">Bem-vindo ao Código Fonte do ForadaMatrixBOT 👋</h1>
 <p>
   <img src="https://img.shields.io/badge/in-development-brightgreen.svg" />
   <img src="https://img.shields.io/badge/version-0.0.1-blue.svg?cacheSeconds=2592000" />
@@ -13,7 +13,7 @@
   </a>
 </p>
 
-> Um aleatório e útil TelegramBOT feito por A.A and fabriciocaetano.
+> Um aleatório e útil TelegramBOT feito por A.A e fabriciocaetano.
 
 ### 🏠 [Página Inicial](https://github.com/foradamatrix/ForadaMatrix#readme)
 
