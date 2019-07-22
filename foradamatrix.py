@@ -13,7 +13,7 @@ try:
     from telegram.ext.dispatcher import run_async #Performance Optimizations
     from emoji import emojize
 except ImportError as err:
-    print(f"Falha ao importar os módulos necessários: {err}")
+    print("Falha ao importar os módulos necessários: {err}")
 
 # Habilitar logging
 logging.basicConfig(format='%(asctime)s - %(name)s - %(levelname)s - %(message)s',
