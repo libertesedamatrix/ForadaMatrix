@@ -63,6 +63,10 @@ def entrougrupo(update, context):
         if member.get_profile_photos == True:
             update.message.reply_text("Recomendável tirar a foto do perfil")
 
+        if member.full_name == None or member.first_name == None:
+            if member.username != None:
+                member.full_name = member.username
+
 def saiugrupo(update, context):
     for member in update.message.left_chat_member:
         update.message.reply_text("{fullname} ({username}) saiu do grupo.".format(fullname=member.full_name, username=member.username))   
