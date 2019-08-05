@@ -6,12 +6,16 @@ try:
     import os
     import sys
     from threading import Thread
-    from telegram.ext import Updater, CommandHandler, MessageHandler, Filters
+    from telegram.ext import Updater, CommandHandler, MessageHandler, Filters, CallbackQueryHandler
     from functools import wraps #parte do send_action
     from telegram.ext import messagequeue as mq
     from telegram import ParseMode #parte de textos padronizados, Negrito(bold * *), Itálico(Italic _ _), Mono(Mono ``)
     from telegram.ext.dispatcher import run_async #Performance Optimizations
     from emoji import emojize
+    import config #carregar config.py
+
+
+    
 except ImportError as err:
     print("Falha ao importar os módulos necessários: {err}")
 
@@ -25,7 +29,7 @@ logger = logging.getLogger(__name__)
 #chat_id= update.message.chat_id
 
 #Restringir o acesso a um manipulador (decorador)
-LISTA_DE_ADMINS = ['SeuIdDoTelegram']
+LISTA_DE_ADMINS = ["config.USERID"]
 
 def restricted(func):
     @wraps(func)
@@ -72,7 +76,7 @@ def error(update, context):
     logger.warning('Update "%s" caused error "%s"', update, context.error)
 
 def main():
-    u = Updater("SeuTokenAqui", use_context=True)
+    u = Updater(config.TOKEN, use_context=True)
     j = u.job_queue
     # Obtem o despachante para registrar manipuladores
     dp = u.dispatcher
