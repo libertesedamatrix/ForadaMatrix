@@ -12,10 +12,9 @@ try:
     from telegram import ParseMode #parte de textos padronizados, Negrito(bold * *), Itálico(Italic _ _), Mono(Mono ``)
     from telegram.ext.dispatcher import run_async #Performance Optimizations
     from emoji import emojize
-    import config #carregar config.py
-
-
-    
+    import json
+    import requests
+    #from config #carregar config.py   
 except ImportError as err:
     print("Falha ao importar os módulos necessários: {err}")
 
@@ -29,7 +28,7 @@ logger = logging.getLogger(__name__)
 #chat_id= update.message.chat_id
 
 #Restringir o acesso a um manipulador (decorador)
-LISTA_DE_ADMINS = ["config.USERID"]
+LISTA_DE_ADMINS = ['IDTelegram']
 
 def restricted(func):
     @wraps(func)
@@ -52,7 +51,61 @@ def help(update, context):
     update.message.reply_text('Ainda não disponível')
 
 #novas callbacks
+def title(update, context):
+    #declare variables to store required values
+    c_id = update.message.chat_id
+    m_txt = update.message.text.replace('/title','').lstrip().rstrip()
+    
+    if(m_txt == ''):
+        context.bot.send_message(chat_id=c_id,text='Título de filme inválido')
+    else:
+        # print("Received movie name: ",m_txt)
+        context.bot.send_message(chat_id=c_id,text=callapi_title(m_txt))
 
+def pesquisarfilme(update, context):
+    #declare variables to store required values
+    c_id = update.message.chat_id
+    m_txt = update.message.text.replace('/pesquisarfilme','').lstrip().rstrip()
+
+    if(m_txt == ''):
+        context.bot.send_message(chat_id=c_id,text='Linha de pesquisa inválida')
+    else:
+        context.bot.send_message(chat_id=c_id,text=callapi_search(m_txt))
+
+def callapi_title(txt):
+    api_base_url = 'http://www.omdbapi.com/?'
+    api_key = ('OMDBAPI')
+    api_url = api_base_url+'apikey='+api_key+'&t='+txt.replace(' ','+')
+    response = requests.get(api_url)
+    if(response.status_code == 200):
+        resp_txt = json.loads(response.content.decode('utf-8'))
+        # print("Recieved response: \n",resp_txt)
+        if(resp_txt['Response'] == 'True'):
+            framed_response = "Title: " + resp_txt['Title'] + "\n" + "Year: " + resp_txt['Year'] + "\n" + "Release Date: " + resp_txt['Released'] + "\n" + "Plot Summary: " + resp_txt['Plot'] + "\n"         
+        else:
+            framed_response = "Título do filme não encontrado"
+    else:
+        framed_response = "Algo deu errado! Por favor, tente novamente"
+    return(framed_response)
+
+def callapi_search(txt):
+    api_base_url = 'http://www.omdbapi.com/?'
+    api_key = ('OMDBAPI')
+    api_url = api_base_url+'apikey='+api_key+'&s='+txt.replace(' ','+')
+    framed_response = 'Filmes com o nome "'+ txt +'" neles: \n'
+    response = requests.get(api_url)
+    if(response.status_code == 200):
+        resp_txt = json.loads(response.content.decode('utf-8'))
+        # print("Recieved response: \n",resp_txt,"\n")
+        # print('Search result:',resp_txt['Search'])
+        if(resp_txt['Response']== 'True'):
+            for t in resp_txt['Search']:
+                framed_response += t['Title'] + '\n'
+        else:
+                framed_response = "Nenhum resultado encontrado"
+    else:
+        framed_response = "Algo deu errado! Por favor, tente novamente"
+    return(framed_response)
 # 
 
 #def add_group(update, context):
@@ -80,7 +133,7 @@ def error(update, context):
     logger.warning('Update "%s" caused error "%s"', update, context.error)
 
 def main():
-    u = Updater(config.TOKEN, use_context=True)
+    u = Updater('BotToken', use_context=True)
     j = u.job_queue
     # Obtem o despachante para registrar manipuladores
     dp = u.dispatcher
@@ -89,6 +142,12 @@ def main():
     dp.add_handler(CommandHandler("start", start))
     dp.add_handler(CommandHandler("help", help))
     dp.add_handler(CommandHandler("checar", callback_checkbotison))
+    title_handler = CommandHandler('title',title)
+    dp.add_handler(title_handler)
+
+    search_handler = CommandHandler('pesquisarfilme',pesquisarfilme)
+    dp.add_handler(search_handler)
+
     entrou_grupo_handle = MessageHandler(Filters.status_update.new_chat_members, entrougrupo)
     dp.add_handler(entrou_grupo_handle)
     saiu_grupo_handle = MessageHandler(Filters.status_update.left_chat_member, saiugrupo)
