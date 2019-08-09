@@ -5,6 +5,7 @@ try:
     import logging
     import os
     import sys
+    import config
     from threading import Thread
     from telegram.ext import Updater, CommandHandler, MessageHandler, Filters, CallbackQueryHandler
     from functools import wraps #parte do send_action
@@ -28,7 +29,7 @@ logger = logging.getLogger(__name__)
 #chat_id= update.message.chat_id
 
 #Restringir o acesso a um manipulador (decorador)
-LISTA_DE_ADMINS = ['IDTelegram']
+LISTA_DE_ADMINS = [config.USERID]
 
 def restricted(func):
     @wraps(func)
@@ -68,13 +69,13 @@ def pesquisarfilme(update, context):
     m_txt = update.message.text.replace('/pesquisarfilme','').lstrip().rstrip()
 
     if(m_txt == ''):
-        context.bot.send_message(chat_id=c_id,text='Linha de pesquisa inválida')
+        context.bot.send_message(chat_id=c_id,text='Pesquisa de Filmes no IMDB\nLinha de pesquisa válida somente em Inglês\n Tente Novamente com argumentos corretos')
     else:
         context.bot.send_message(chat_id=c_id,text=callapi_search(m_txt))
 
 def callapi_title(txt):
     api_base_url = 'http://www.omdbapi.com/?'
-    api_key = ('OMDBAPI')
+    api_key = (config.OMDBAPI)
     api_url = api_base_url+'apikey='+api_key+'&t='+txt.replace(' ','+')
     response = requests.get(api_url)
     if(response.status_code == 200):
@@ -90,7 +91,7 @@ def callapi_title(txt):
 
 def callapi_search(txt):
     api_base_url = 'http://www.omdbapi.com/?'
-    api_key = ('OMDBAPI')
+    api_key = (config.OMDBAPI)
     api_url = api_base_url+'apikey='+api_key+'&s='+txt.replace(' ','+')
     framed_response = 'Filmes com o nome "'+ txt +'" neles: \n'
     response = requests.get(api_url)
@@ -133,7 +134,7 @@ def error(update, context):
     logger.warning('Update "%s" caused error "%s"', update, context.error)
 
 def main():
-    u = Updater('BotToken', use_context=True)
+    u = Updater(config.TOKEN, use_context=True)
     j = u.job_queue
     # Obtem o despachante para registrar manipuladores
     dp = u.dispatcher
