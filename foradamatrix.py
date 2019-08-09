@@ -140,8 +140,8 @@ def main():
     dp = u.dispatcher
 
     # em comandos diferentes - responde no Telegram
-    dp.add_handler(CommandHandler("start", start))
-    dp.add_handler(CommandHandler("help", help))
+    dp.add_handler(CommandHandler("iniciar", start))
+    dp.add_handler(CommandHandler("ajuda", help))
     dp.add_handler(CommandHandler("checar", callback_checkbotison))
     title_handler = CommandHandler('title',title)
     dp.add_handler(title_handler)
