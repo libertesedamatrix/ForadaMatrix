@@ -1,5 +1,6 @@
 <h1 align="center">Bem-vindo ao Código Fonte do ForadaMatrixBOT 👋</h1>
 <p>
+  <img src="https://img.shields.io/badge/A.A-WIP%2B-61c8c1" />
   <img src="https://img.shields.io/badge/in-development-brightgreen.svg" />
   <img src="https://img.shields.io/badge/version-0.0.1-blue.svg?cacheSeconds=2592000" />
   <a href="https://github.com/foradamatrix/ForadaMatrix#readme">
