@@ -3,3 +3,8 @@
 TOKEN = 'BOTTOKEN'
 USERID = ['USER(S)ID(S)'] #contém [] por causa que percorre strings
 OMDBAPI = 'APIOMDB'
+API_URL = ('http://api.openweathermap.org/data/2.5/weather?q={}&mode=json&units=metric&appid=APIIDHERE')
+API_URL_LOC = "http://api.openweathermap.org/data/2.5/weather?lat={}&lon={}&mode=json&units=metric&appid=APIIDHERE"
+
+#mensagens
+MensagemRegras = "Mensagem ou link das regras no canal/grupo/site"
