@@ -8,6 +8,7 @@ try:
     import config
     from threading import Thread
     from telegram.ext import Updater, CommandHandler, MessageHandler, Filters, CallbackQueryHandler
+    import functools
     from functools import wraps #parte do send_action
     from telegram.ext import messagequeue as mq
     from telegram import ParseMode #parte de textos padronizados, Negrito(bold * *), Itálico(Italic _ _), Mono(Mono ``)
@@ -15,7 +16,7 @@ try:
     from emoji import emojize
     import json
     import requests
-    #from config #carregar config.py   
+    from pprint import pprint as pp
 except ImportError as err:
     print("Falha ao importar os módulos necessários: {err}")
 
@@ -44,6 +45,9 @@ def restricted(func):
         return func(update, context, *args, **kwargs)
     return wrapped
 
+API_URL = (config.API_URL)
+API_URL_LOC = config.API_URL_LOC
+
 @restricted
 def start(update, context):
     update.message.reply_text('Olá, Bot Iniciado no Grupo/Chat com sucesso.')
@@ -52,10 +56,66 @@ def help(update, context):
     update.message.reply_text('Ainda não disponível')
 
 #novas callbacks
+
+#regras
+def regras(update, context):
+    update.message.reply_text(text=config.MensagemRegras, use_aliases=True, parse_mode=ParseMode.MARKDOWN)
+
+#pesquisar climas
+def query_api(city):
+    try:
+        print(API_URL.format(city, API_KEY))
+        data = requests.get(API_URL.format(city, API_KEY)).json()
+    except Exception as exc:
+        print(exc)
+        data = None
+    return data
+
+
+def weather_check(update, context, args):
+    try:
+        user_says = " ".join(args)
+        resp = query_api(user_says)
+        pp(resp)
+        chat_id = update.message.chat_id
+        temp = int(round((resp['main']['temp'])))
+        pressure = resp['main']['pressure']
+        country = resp['sys']['country']
+        desc = resp['weather'][0]['description']
+        resp = ("Temperatura atual em %s, %s é %s C. \nPressão Atmosférica %s hPa\n%s" % (user_says, country, temp, pressure, desc.capitalize()))
+        context.bot.send_message(chat_id=chat_id, text=resp)
+    except KeyError:
+        resp = ("Cidade não encontrada. Nós não temos dados climáticos para %s. Por Favor tente novamente usando uma cidade diferente. " % user_says)
+        context.bot.send_message(chat_id=chat_id, text=resp)
+
+def getLocation(update, context, user_data):
+    msg = update.message
+    user_data['msg'] = msg
+    user_data['id'] = update.update_id
+    update.message.reply_text('Checando clima por coordenadas geográficas lat: {}, lng: {}'.format(
+        msg.location.latitude, msg.location.longitude))
+    try:
+        print(API_URL_LOC.format(msg.location.latitude, msg.location.longitude, API_KEY))
+        resp = requests.get(API_URL_LOC.format(msg.location.latitude, msg.location.longitude, API_KEY)).json()
+        pp(resp)
+        chat_id = update.message.chat_id
+        temp = int(round((resp['main']['temp'])))
+        name = resp['name']
+        pressure = resp['main']['pressure']
+        country = resp['sys']['country']
+        desc = resp['weather'][0]['description']
+        resp = ("Temperatura atual em %s, %s é %s C. \nPressão atmosférica %s hPa\n%s" % (
+        name, country, temp, pressure, desc.capitalize()))
+        context.bot.send_message(chat_id=chat_id, text=resp)
+    except Exception as exc:
+        print(exc)
+        resp = None
+
+#pesquisar filmes
 def title(update, context):
     #declare variables to store required values
     c_id = update.message.chat_id
-    m_txt = update.message.text.replace('/title','').lstrip().rstrip()
+    m_txt = update.message.text.replace('/titulo','').lstrip().rstrip()
     
     if(m_txt == ''):
         context.bot.send_message(chat_id=c_id,text='Título de filme inválido')
@@ -82,7 +142,7 @@ def callapi_title(txt):
         resp_txt = json.loads(response.content.decode('utf-8'))
         # print("Recieved response: \n",resp_txt)
         if(resp_txt['Response'] == 'True'):
-            framed_response = "Title: " + resp_txt['Title'] + "\n" + "Year: " + resp_txt['Year'] + "\n" + "Release Date: " + resp_txt['Released'] + "\n" + "Plot Summary: " + resp_txt['Plot'] + "\n"         
+            framed_response = "Título: " + resp_txt['Title'] + "\n" + "Ano: " + resp_txt['Year'] + "\n" + "Data de Lançamento: " + resp_txt['Released'] + "\n" + "Resumo do Filme(Plot): " + resp_txt['Plot'] + "\n"         
         else:
             framed_response = "Título do filme não encontrado"
     else:
@@ -143,12 +203,18 @@ def main():
     dp.add_handler(CommandHandler("iniciar", start))
     dp.add_handler(CommandHandler("ajuda", help))
     dp.add_handler(CommandHandler("checar", callback_checkbotison))
-    title_handler = CommandHandler('title',title)
+    title_handler = CommandHandler('titulo',title)
     dp.add_handler(title_handler)
+
+    dp.add_handler(CommandHandler('clima',weather_check, pass_args=True))
+    dp.add_handler(MessageHandler(Filters.location,
+                                  getLocation,
+                                  pass_user_data=True))
 
     search_handler = CommandHandler('pesquisarfilme',pesquisarfilme)
     dp.add_handler(search_handler)
 
+    dp.add_handler(CommandHandler('regras',regras))
     entrou_grupo_handle = MessageHandler(Filters.status_update.new_chat_members, entrougrupo)
     dp.add_handler(entrou_grupo_handle)
     saiu_grupo_handle = MessageHandler(Filters.status_update.left_chat_member, saiugrupo)
