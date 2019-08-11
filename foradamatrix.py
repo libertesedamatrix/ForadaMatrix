@@ -129,7 +129,7 @@ def pesquisarfilme(update, context):
     m_txt = update.message.text.replace('/pesquisarfilme','').lstrip().rstrip()
 
     if(m_txt == ''):
-        context.bot.send_message(chat_id=c_id,text='Pesquisa de Filmes no IMDB\nLinha de pesquisa válida somente em Inglês\n Tente Novamente com argumentos corretos')
+        context.bot.send_message(chat_id=c_id,text='Pesquisa de Filmes no IMDB\nLinha de pesquisa válida somente em Inglês\nTente Novamente com argumentos corretos')
     else:
         context.bot.send_message(chat_id=c_id,text=callapi_search(m_txt))
 
