@@ -16,12 +16,17 @@ try:
     from emoji import emojize
     import json
     import requests
+    import time
     from pprint import pprint as pp
     #from telegram import Bot
     #from yandex_translate import YandexTranslate
 except ImportError as err:
     print("Falha ao importar os módulos necessários: {err}")
 
+
+while True:
+    print('Looping the bot')
+    time.sleep(2) # 2 second delay
 # Habilitar logging
 logging.basicConfig(format='%(asctime)s - %(name)s - %(levelname)s - %(message)s',
                     level=logging.INFO)
