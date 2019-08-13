@@ -1,32 +1,29 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 
-try:
-    import logging
-    import os
-    import sys
-    import config
-    from threading import Thread
-    from telegram.ext import Updater, CommandHandler, MessageHandler, Filters, CallbackQueryHandler
-    import functools
-    from functools import wraps #parte do send_action
-    from telegram.ext import messagequeue as mq
-    from telegram import ParseMode #parte de textos padronizados, Negrito(bold * *), Itálico(Italic _ _), Mono(Mono ``)
-    from telegram.ext.dispatcher import run_async #Performance Optimizations
-    from emoji import emojize
-    import json
-    import requests
-    import time
-    from pprint import pprint as pp
-    #from telegram import Bot
-    #from yandex_translate import YandexTranslate
-except ImportError as err:
-    print("Falha ao importar os módulos necessários: {err}")
-
+import logging
+import os
+import sys
+import config
+from threading import Thread
+from telegram.ext import Updater, CommandHandler, MessageHandler, Filters, CallbackQueryHandler
+import functools
+from functools import wraps #parte do send_action
+from telegram.ext import messagequeue as mq
+from telegram import ParseMode #parte de textos padronizados, Negrito(bold * *), Itálico(Italic _ _), Mono(Mono ``)
+from telegram.ext.dispatcher import run_async #Performance Optimizations
+from emoji import emojize
+import json
+import requests
+from pprint import pprint as pp
+import time
+#from telegram import Bot
+#from yandex_translate import YandexTranslate
 
 while True:
     print('Looping the bot')
     time.sleep(2) # 2 second delay
+
 # Habilitar logging
 logging.basicConfig(format='%(asctime)s - %(name)s - %(levelname)s - %(message)s',
                     level=logging.INFO)
@@ -270,5 +267,5 @@ def main():
     u.start_polling()
     u.idle()
 
-if __name__ == '__main__':
+if __name__ == '__main__':    
     main()
