@@ -17,6 +17,8 @@ try:
     import json
     import requests
     from pprint import pprint as pp
+    #from telegram import Bot
+    #from yandex_translate import YandexTranslate
 except ImportError as err:
     print("Falha ao importar os módulos necessários: {err}")
 
@@ -28,6 +30,16 @@ logger = logging.getLogger(__name__)
 
 #use isso em cada callback que for usar chat_id para não precisar colocar o id do chat
 #chat_id= update.message.chat_id
+
+"""
+translate = YandexTranslate(config.yandex_key)
+translate = YandexTranslate('Your API key here.')
+
+bot = Bot(
+    token=config.TOKEN,
+    base_url=config.TG_API_URL
+)
+"""
 
 #Restringir o acesso a um manipulador (decorador)
 LISTA_DE_ADMINS = [config.USERID]
@@ -57,6 +69,12 @@ def help(update, context):
 
 #novas callbacks
 
+
+#tradutor
+def check(update, context):
+    input = update.message.text
+    input = translate.translate(input, 'en-pt')
+    update.message.reply_text(input['text'][0])
 #regras
 def regras(update, context):
     update.message.reply_text(text=config.MensagemRegras, use_aliases=True, parse_mode=ParseMode.MARKDOWN)
@@ -167,6 +185,21 @@ def callapi_search(txt):
     else:
         framed_response = "Algo deu errado! Por favor, tente novamente"
     return(framed_response)
+
+def ratings(update, context):
+    movie_name = update.message.text
+    print(movie_name)
+    movie_rating = getRating(movie_name)
+    message_text = f"Classificação para {movie_name} é {movie_rating}"
+    context.bot.send_message(chat_id=update.message.chat_id, text = message_text)
+
+
+def getRating(movieTitle):
+    url = 'http://www.omdbapi.com'
+    data = {'apikey':config.OMDBAPI,'t':movieTitle}
+    response = requests.get(url,data)
+    return str(response.json().get("imdbRating"))
+
 # 
 
 #def add_group(update, context):
@@ -213,6 +246,12 @@ def main():
 
     search_handler = CommandHandler('pesquisarfilme',pesquisarfilme)
     dp.add_handler(search_handler)
+
+    #ratings_handler = MessageHandler(Filters.text, ratings)
+    ratings_handler = CommandHandler('imdbclassificar', ratings)
+    dp.add_handler(ratings_handler)
+
+    #dp.add_handler(MessageHandler(Filters.text, callback=check))
 
     dp.add_handler(CommandHandler('regras',regras))
     entrou_grupo_handle = MessageHandler(Filters.status_update.new_chat_members, entrougrupo)
