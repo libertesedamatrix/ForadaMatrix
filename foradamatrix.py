@@ -20,9 +20,6 @@ import time
 #from telegram import Bot
 #from yandex_translate import YandexTranslate
 
-while True:
-    print('Looping the bot')
-    time.sleep(2) # 2 second delay
 
 # Habilitar logging
 logging.basicConfig(format='%(asctime)s - %(name)s - %(levelname)s - %(message)s',
@@ -269,3 +266,7 @@ def main():
 
 if __name__ == '__main__':    
     main()
+
+while True:
+    print('Looping the bot')
+    time.sleep(2) # 2 second delay
